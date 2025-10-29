@@ -110,6 +110,31 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# >>> conda initialize (manual clean version) >>>
+if [ -d "$HOME/miniconda3" ]; then
+    export CONDA_HOME="$HOME/miniconda3"
+    export PATH="$CONDA_HOME/bin:$PATH"
+
+    # Ensure conda base env variables are loaded only if conda is available
+    if command -v conda >/dev/null 2>&1; then
+        # Prevent auto-activation of base unless desired
+        conda config --set auto_activate_base false >/dev/null 2>&1
+        # Initialize shell functions without overriding prompt styling
+        __conda_setup="$("$CONDA_HOME/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
+        if [ $? -eq 0 ]; then
+            eval "$__conda_setup"
+        else
+            if [ -f "$CONDA_HOME/etc/profile.d/conda.sh" ]; then
+                . "$CONDA_HOME/etc/profile.d/conda.sh"
+            fi
+        fi
+        unset __conda_setup
+    fi
+fi
+# <<< conda initialize <<<
+
+
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -117,4 +142,20 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 export TERMINAL=kitty
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh)"	
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/pri/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/pri/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/pri/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/pri/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
